@@ -15,11 +15,11 @@ int main() {
     using namespace sac;
     std::vector<Shape> shapes = import_ply(std::string(DATA_DIR) + TEST_SAMPLE);
 
-    std::cout << "In order of the AABB area: " << std::endl;
+//    std::cout << "In order of the AABB area: " << std::endl;
     std::sort(shapes.begin(), shapes.end(), greater_bb_area);
 
-    for (auto const &sh: shapes)
-        std::cout << sh;
+//    for (auto const &sh: shapes)
+//        std::cout << sh;
 
     // count vertices
     int verts = 0;
@@ -32,7 +32,6 @@ int main() {
     Contour contour;
     for (auto const &sh : shapes) {
         offsets.push_back(contour.addShape(sh));
-        std::cout << offsets.back().first << ", " << offsets.back().second << std::endl;
     }
 
     export_ply(shapes, offsets, std::string(DEBUG_DIR) + TEST_SAMPLE);

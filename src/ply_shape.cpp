@@ -56,8 +56,6 @@ namespace sac {
             xmax = std::max(xmax, x1);
             ymax = std::max(ymax, y1);
 
-            std::cout << xmin << std::endl;
-
             perimeter += distance(x1, y1, x2, y2);
             area += (x1 * y2 - x2 * y1);
 

@@ -2,14 +2,22 @@
 #include <vector>
 #include <algorithm>
 #include <cassert>
+#include <random>
 
-
-# define STRATEGY_FIRST 1
-# define STRATEGY_RANDOM_BEST 0
+# define STRATEGY_FIRST 0
+# define STRATEGY_RANDOM_BEST 1
 
 # define EPS 1e-5
 
 namespace sac {
+
+    int random_choose(int max) {
+        std::random_device r;
+        std::default_random_engine e(r());
+        std::uniform_int_distribution<int> uniform_dist(0, max - 1);
+        return uniform_dist(e);
+    }
+
     Contour::Node::Node(float x, float y) : x(x), y(y) {}
 
     Contour::Node::operator std::pair<float, float>() const {
@@ -31,9 +39,8 @@ namespace sac {
 
             if (isHavingEnoughSpace(it, dx, dy)) {
                 float starting_area = xmax * ymax;
-                xmax = std::max(xmax, dx + it->x);
-                ymax = std::max(ymax, dy + it->y);
-                float cost = (xmax * ymax) - starting_area;
+                float finishing_area = std::max(xmax, dx + it->x) * std::max(ymax, dy + it->y);
+                float cost = finishing_area - starting_area;
 
                 if (cost < EPS) {
 #if STRATEGY_FIRST
@@ -43,19 +50,18 @@ namespace sac {
                 }
                 candidates.emplace_back(it, cost);
             }
-            else {
-                ;
-            }
         }
         assert(!candidates.empty());
 
+
         std::sort(candidates.begin(), candidates.end(),
-                  [](std::pair<INode, float> a, std::pair<INode, float> b) {
-                      return a.second <= b.second; 
+                  [](const std::pair<INode, float> a, const std::pair<INode, float> b) {
+                      return (a.second < b.second);
                   });
+
         if (zero_cost_candidates) {
 #if STRATEGY_RANDOM_BEST
-            throw "not_implemented";
+            return addShapeToNode(shape, candidates[random_choose(zero_cost_candidates)].first);
 #endif
         }
 
@@ -90,6 +96,8 @@ namespace sac {
         float dx = shape.aabb.xsize();
         float dy = shape.aabb.ysize();
 
+        xmax = std::max(xmax, x + dx);
+        ymax = std::max(ymax, y + dy);
         //
         //(0)->0
         //     |
