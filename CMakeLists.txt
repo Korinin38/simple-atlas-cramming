@@ -4,7 +4,7 @@ project(simple_atlas_cramming)
 set(CMAKE_CXX_STANDARD 17)
 include_directories(libs)
 
-set(SORUCES
+set(SOURCES
         src/ply_shape.cpp
         src/ply_shape.h
         src/main.cpp)
