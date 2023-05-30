@@ -1,5 +1,7 @@
 #ifndef SIMPLE_ATLAS_CRAMMING_PLY_SHAPE_H
 #define SIMPLE_ATLAS_CRAMMING_PLY_SHAPE_H
+#include <vector>
+#include <ostream>
 namespace sac {
 
     /**  Axis-Aligned Bounding Box
@@ -10,13 +12,12 @@ namespace sac {
         float xmax;
         float ymin;
         float ymax;
-        float area();
 
         void set(float xmin, float xmax, float ymin, float ymax);
 
-        float xsize();
-
-        float ysize();
+        float xsize() const;
+        float ysize() const;
+        float area() const;
     };
 
     /** 2D-shape with precalculated options, such as:

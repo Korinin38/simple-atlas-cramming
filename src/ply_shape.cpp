@@ -17,15 +17,15 @@ namespace sac {
         this->ymax = ymax;
     }
 
-    float AABB::xsize() {
+    float AABB::xsize() const {
         return xmax - xmin;
     }
 
-    float AABB::ysize() {
+    float AABB::ysize() const {
         return ymax - ymin;
     }
 
-    float AABB::area() {
+    float AABB::area() const {
         return xsize() * ysize();
     }
 
@@ -126,11 +126,11 @@ namespace sac {
         std::vector<std::vector<int>> faces;
 
         int vertex_num = 0;
-        for (const Shape &sh: shapes) {
+        for (int i = 0; i < shapes.size(); ++i) {
             std::vector<int> indices;
-            for (std::pair<float, float> v: sh.vertices) {
-                vertices[0].push_back(v.first + offsets[vertex_num].first);
-                vertices[1].push_back(v.second + offsets[vertex_num].second);
+            for (std::pair<float, float> v: shapes[i].vertices) {
+                vertices[0].push_back(v.first + offsets[i].first);
+                vertices[1].push_back(v.second + offsets[i].second);
                 vertices[2].push_back(0);
 
                 indices.push_back(vertex_num);

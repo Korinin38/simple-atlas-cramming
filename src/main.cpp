@@ -1,7 +1,7 @@
 #include <iostream>
 #include <algorithm>
-#include "happly.h"
 #include "ply_shape.h"
+#include "atlas_contour.h"
 
 #define DATA_DIR "data/src/"
 #define DEBUG_DIR "data/debug/"
@@ -26,8 +26,18 @@ int main() {
     for (const Shape &sh: shapes)
         verts += sh.vertices.size();
 
-    std::vector<std::pair<float, float>> offsets(verts, {0, 0});
+    std::vector<std::pair<float, float>> offsets;
+    offsets.reserve(verts);
+
+    Contour contour;
+    for (auto const &sh : shapes) {
+        offsets.push_back(contour.addShape(sh));
+        std::cout << offsets.back().first << ", " << offsets.back().second << std::endl;
+    }
 
     export_ply(shapes, offsets, std::string(DEBUG_DIR) + TEST_SAMPLE);
+
+    std::cout << "Total area: " << contour.area() << std::endl;
+
     return 0;
 }
