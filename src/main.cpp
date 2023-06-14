@@ -35,6 +35,7 @@ int main() {
     }
 
     export_ply(shapes, offsets, std::string(DEBUG_DIR) + TEST_SAMPLE);
+    export_ply_aabb(shapes, offsets, std::string(DEBUG_DIR) + "aabb_" + TEST_SAMPLE);
 
     std::cout << "Total area: " << contour.area() << std::endl;
 

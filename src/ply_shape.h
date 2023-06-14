@@ -59,6 +59,10 @@ namespace sac {
     void export_ply(const std::vector<Shape> &shapes,
                     const std::vector<std::pair<float, float>> &offsets,
                     std::string filename);
+
+    void export_ply_aabb(const std::vector<Shape> &shapes,
+                    const std::vector<std::pair<float, float>> &offsets,
+                    std::string filename);
 }
 
 

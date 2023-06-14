@@ -148,5 +148,51 @@ namespace sac {
 
         plyOut.write(filename);
     }
+
+    void export_ply_aabb(const std::vector<Shape> &shapes, const std::vector<std::pair<float, float>> &offsets,
+                         std::string filename) {
+        std::vector<std::vector<float>> vertices(3);
+        std::vector<std::vector<int>> faces;
+
+        int vertex_num = 0;
+        for (int i = 0; i < shapes.size(); ++i) {
+            std::vector<int> indices;
+
+            AABB aabb = shapes[i].aabb;
+            vertices[0].push_back(offsets[i].first);
+            vertices[1].push_back(offsets[i].second);
+            vertices[2].push_back(0);
+
+            vertices[0].push_back(offsets[i].first + aabb.xsize());
+            vertices[1].push_back(offsets[i].second);
+            vertices[2].push_back(0);
+
+            vertices[0].push_back(offsets[i].first + aabb.xsize());
+            vertices[1].push_back(offsets[i].second + aabb.ysize());
+            vertices[2].push_back(0);
+
+            vertices[0].push_back(offsets[i].first);
+            vertices[1].push_back(offsets[i].second + aabb.ysize());
+            vertices[2].push_back(0);
+
+            indices.push_back(vertex_num++);
+            indices.push_back(vertex_num++);
+            indices.push_back(vertex_num++);
+            indices.push_back(vertex_num++);
+
+            faces.push_back(indices);
+        }
+
+        happly::PLYData plyOut;
+        plyOut.addElement("vertex", vertices[0].size());
+        plyOut.addElement("face", faces.size());
+
+        plyOut.getElement("vertex").addProperty<float>("x", vertices[0]);
+        plyOut.getElement("vertex").addProperty<float>("y", vertices[1]);
+        plyOut.getElement("vertex").addProperty<float>("z", vertices[2]);
+        plyOut.getElement("face").addListProperty<int>("vertex_index", faces);
+
+        plyOut.write(filename);
+    }
 }
 
